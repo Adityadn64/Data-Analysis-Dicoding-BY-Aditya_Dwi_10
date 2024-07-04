@@ -1,5 +1,5 @@
 import os
-import rembg
+# import rembg
 import pandas as pd
 import seaborn as sns
 import streamlit as st
