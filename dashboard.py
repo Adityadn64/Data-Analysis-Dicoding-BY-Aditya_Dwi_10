@@ -1,4 +1,5 @@
 import os
+# import rembg
 import pandas as pd
 import seaborn as sns
 import streamlit as st
@@ -137,6 +138,72 @@ else:
 
     Dilihat dari scatter plot ini menunjukkan bahwa suhu memiliki korelasi positif yang signifikan dengan jumlah peminjaman sepeda, dan kelembaban juga tampaknya memiliki pengaruh tetapi mungkin tidak sekuat suhu.
     """)
+
+    # Define bins for temperature
+    st.markdown('### Clustering Analysis:')
+
+    bins = [0, 1, 2, 3, 4]
+    labels = ['Fail', 'Spring', 'Summer', 'Winter']
+
+    # Create a new column 'temp_category' based on temperature bins
+    filtered_df['temp_category'] = pd.cut(filtered_df['temp'], bins=bins, labels=labels)
+
+    # Group by 'temp_category' and calculate mean count
+    clustered_data = filtered_df.groupby('temp_category')['count'].mean().reset_index()
+
+    # Visualize clusters
+    plt.figure(figsize=(10, 6))
+    plt.bar(clustered_data['temp_category'], clustered_data['count'], color='skyblue')
+    plt.xlabel('Temperature Category')
+    plt.ylabel('Average Number of Rentals')
+    plt.title('Average Number of Rentals by Temperature Category')
+    plt.xticks(rotation=45)
+    plt.show()
+    st.pyplot()
+
+    # Calculate Recency (R)
+    st.markdown("### RFM Analysis:")
+
+    max_date = df_day['dateday'].max()
+    df_day['Recency'] = (max_date - df_day['dateday']).dt.days
+
+    # Calculate Frequency (F) and Monetary (M)
+    rfm_data = df_day.groupby('dateday').agg({
+        'count': sum,                    # Monetary (M)
+        'Recency': min,                # Recency (R)
+        'dateday': 'count'            # Frequency (F)
+    }).rename(columns={
+        'count': 'Monetary',
+        'dateday': 'Frequency'
+    }).reset_index()
+
+    # Visualize RFM Analysis
+    plt.figure(figsize=(12, 6))
+
+    # Plot Recency
+    plt.subplot(1, 3, 1)
+    plt.hist(rfm_data['Recency'], bins=20, color='skyblue')
+    plt.title('Recency')
+    plt.xlabel('Days since last rental')
+    plt.ylabel('Count')
+
+    # Plot Frequency
+    plt.subplot(1, 3, 2)
+    plt.hist(rfm_data['Frequency'], bins=20, color='salmon')
+    plt.title('Frequency')
+    plt.xlabel('Number of rentals per day')
+    plt.ylabel('Count')
+
+    # Plot Monetary
+    plt.subplot(1, 3, 3)
+    plt.hist(rfm_data['Monetary'], bins=20, color='lightgreen')
+    plt.title('Monetary')
+    plt.xlabel('Total rentals per day')
+    plt.ylabel('Count')
+
+    plt.tight_layout()
+    plt.show()
+    st.pyplot()
 
 # Footer
 st.markdown("---")
