@@ -1,3 +1,26 @@
+# Dicoding Collection Dashboard
+
+## Setup Environment - Anaconda
+```
+conda create --name streamlit-app python=3.12
+conda activate streamlit-app
+pip install -r requirements.txt
+```
+
+## Setup Environment - Shell/Terminal
+```
+cd "Data Analysis"
+pip install -r requirements.txt
+```
+
+## Run Streamlit app
+```
+Choice:
+- python -m streamlit run dashboard.py
+- streamlit run dashboard.py
+- python run.py
+```
+
 # Additional Information (Dicoding Profile):
 
 - User profile:
@@ -19,3 +42,5 @@ Bike Sharing Dataset: [
 Created by: Aditya Dwi Nugraha
 
 © Copyright 2024 All Right Reserved by Aditya Dwi Nugraha
+
+URL Deploy Streamlit: https://data-analysis-bike-sharing-dicoding-by-adityadwi10.streamlit.app/
