@@ -1,4 +1,5 @@
 rembg
+numpy
 pandas
 seaborn
 streamlit
